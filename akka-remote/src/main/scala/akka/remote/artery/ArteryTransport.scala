@@ -93,6 +93,8 @@ private[remote] trait InboundContext {
 
   def settings: ArterySettings
 
+  def publishDropped(message: Any, reason: String): Unit
+
 }
 
 /**
@@ -985,6 +987,10 @@ private[remote] abstract class ArteryTransport(_system: ExtendedActorSystem, _pr
         if (manifest) c.runNextClassManifestAdvertisement()
       case _ =>
     }
+  }
+
+  override def publishDropped(message: Any, reason: String): Unit = {
+    system.eventStream.publish(Dropped(message, reason, system.deadLetters))
   }
 
 }

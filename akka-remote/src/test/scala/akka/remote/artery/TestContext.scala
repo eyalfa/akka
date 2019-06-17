@@ -63,6 +63,8 @@ private[remote] class TestInboundContext(
 
   override lazy val settings: ArterySettings =
     ArterySettings(ConfigFactory.load().getConfig("akka.remote.artery"))
+
+  override def publishDropped(message: Any, reason: String): Unit = ()
 }
 
 private[remote] class TestOutboundContext(
