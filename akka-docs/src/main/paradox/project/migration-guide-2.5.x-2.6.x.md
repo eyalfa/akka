@@ -251,6 +251,19 @@ To disable passivation you can use configuration:
 akka.cluster.sharding.passivate-idle-entity-after = off
 ```
 
+### Distributed Data
+
+Configuration properties for controlling sizes of `Gossip` and `DeltaPropagation` messages in Distributed Data
+has been reduced. Previous defaults sometimes resulted in messages exceeding max payload size for remote
+actor messages.
+
+Configuration properties:
+
+```
+akka.cluster.distributed-data.max-delta-elements = 500
+akka.cluster.distributed-data.delta-crdt.max-delta-size = 50
+```
+
 ### CoordinatedShutdown is run from ActorSystem.terminate
 
 No migration is needed but it is mentioned here because it is a change in behavior.
