@@ -297,7 +297,7 @@ private[remote] class InboundHandshake(inboundContext: InboundContext, inControl
           val dropReason = s"Unknown system with UID [${env.originUid}]. " +
             s"This system with UID [${inboundContext.localAddress.uid}] was probably restarted. " +
             "Messages will be accepted when new handshake has been completed."
-          inboundContext.publishDropped(env.message, dropReason)
+          inboundContext.publishDropped(env, dropReason)
           pull(in)
         }
       }

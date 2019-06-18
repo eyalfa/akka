@@ -24,6 +24,7 @@ import scala.util.Success
 import scala.util.Try
 import scala.util.control.NoStackTrace
 import scala.util.control.NonFatal
+
 import akka.Done
 import akka.NotUsed
 import akka.actor.Actor
@@ -93,7 +94,7 @@ private[remote] trait InboundContext {
 
   def settings: ArterySettings
 
-  def publishDropped(message: Any, reason: String): Unit
+  def publishDropped(inbound: InboundEnvelope, reason: String): Unit
 
 }
 
@@ -989,8 +990,8 @@ private[remote] abstract class ArteryTransport(_system: ExtendedActorSystem, _pr
     }
   }
 
-  override def publishDropped(message: Any, reason: String): Unit = {
-    system.eventStream.publish(Dropped(message, reason, system.deadLetters))
+  override def publishDropped(env: InboundEnvelope, reason: String): Unit = {
+    system.eventStream.publish(Dropped(env.message, reason, env.recipient.getOrElse(system.deadLetters)))
   }
 
 }

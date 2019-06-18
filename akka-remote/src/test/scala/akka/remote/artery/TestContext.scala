@@ -7,9 +7,11 @@ package akka.remote.artery
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.ThreadLocalRandom
+
 import scala.concurrent.Future
 import scala.concurrent.Promise
 import scala.util.Success
+
 import akka.Done
 import akka.actor.ActorRef
 import akka.actor.Address
@@ -64,7 +66,7 @@ private[remote] class TestInboundContext(
   override lazy val settings: ArterySettings =
     ArterySettings(ConfigFactory.load().getConfig("akka.remote.artery"))
 
-  override def publishDropped(message: Any, reason: String): Unit = ()
+  override def publishDropped(env: InboundEnvelope, reason: String): Unit = ()
 }
 
 private[remote] class TestOutboundContext(
