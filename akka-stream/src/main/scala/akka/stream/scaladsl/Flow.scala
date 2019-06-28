@@ -2425,14 +2425,17 @@ trait FlowOps[+Out, +Mat] {
     val left: Flow[Out, Any, NotUsed] = Flow[A].concat(passedEndSrc)
     val right: Source[Any, Mat2] = Source.fromGraph(that).concat(passedEndSrc)
     val zipFlow: Flow[Out, (A, U), Mat2] = left
-      .zipMat(right)(Keep.right)
+      .zipWithMat(right){
+        case (`passedEnd`, `passedEnd`) => passedEnd
+        case (`passedEnd`, r: U @unchecked) => (thisElem, r)
+        case (l: A @unchecked, `passedEnd`) => (l, thatElem)
+        case t: (A, U) @unchecked           => t
+      } (Keep.right)
       .takeWhile {
-        case (`passedEnd`, `passedEnd`) => false
+        case `passedEnd` => false
         case _                          => true
       }
       .map {
-        case (`passedEnd`, r: U @unchecked) => (thisElem, r)
-        case (l: A @unchecked, `passedEnd`) => (l, thatElem)
         case t: (A, U) @unchecked           => t
       }
     zipFlow
