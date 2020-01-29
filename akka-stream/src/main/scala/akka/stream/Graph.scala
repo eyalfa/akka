@@ -6,6 +6,7 @@ package akka.stream
 
 import akka.annotation.InternalApi
 import akka.stream.impl.TraversalBuilder
+import akka.stream.scaladsl.GenericGraph
 
 import scala.annotation.unchecked.uncheckedVariance
 
@@ -67,6 +68,12 @@ trait Graph[+S <: Shape, +M] {
    * less specific than attributes set directly on the individual graphs of the composite.
    */
   def addAttributes(attr: Attributes): Graph[S, M] = withAttributes(traversalBuilder.attributes and attr)
+
+  /**
+   * Transform the materialized value of this Flow, leaving all other properties as they were.
+   */
+  def mapMaterializedValue[Mat2](f: M => Mat2): Graph[S, Mat2] =
+    new GenericGraph(shape, traversalBuilder.transformMat(f))
 }
 
 /**

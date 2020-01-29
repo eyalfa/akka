@@ -57,6 +57,9 @@ private[stream] final class GenericGraphWithChangedAttributes[S <: Shape, Mat](
 
   override def withAttributes(attr: Attributes): Graph[S, Mat] =
     new GenericGraphWithChangedAttributes(shape, originalTraversalBuilder, attr)
+
+  override def mapMaterializedValue[Mat2](f: Mat => Mat2): Graph[S, Mat2] =
+    new GenericGraphWithChangedAttributes[S, Mat2](shape, originalTraversalBuilder.transformMat(f), newAttributes)
 }
 
 object Merge {

@@ -5,7 +5,7 @@
 package akka.stream.impl
 
 import akka.NotUsed
-import akka.annotation.{ DoNotInherit, InternalApi }
+import akka.annotation.{DoNotInherit, InternalApi}
 import akka.stream._
 import akka.stream.impl.StreamLayout.AtomicModule
 import org.reactivestreams._
@@ -41,7 +41,6 @@ import akka.event.Logging
 
   override private[stream] def traversalBuilder =
     LinearTraversalBuilder.fromModule(this, attributes).makeIsland(SourceModuleIslandTag)
-
 }
 
 /**

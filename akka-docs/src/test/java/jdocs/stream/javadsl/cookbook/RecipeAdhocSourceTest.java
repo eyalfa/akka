@@ -5,9 +5,13 @@
 package jdocs.stream.javadsl.cookbook;
 
 import akka.Done;
+import akka.NotUsed;
 import akka.actor.ActorSystem;
 import akka.dispatch.Futures;
+import akka.japi.function.Function;
 import akka.japi.pf.PFBuilder;
+import akka.stream.Graph;
+import akka.stream.SourceShape;
 import akka.stream.javadsl.Keep;
 import akka.stream.javadsl.Source;
 import akka.stream.testkit.TestSubscriber;
@@ -17,11 +21,13 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import scala.Function1;
 import scala.concurrent.Await;
 import scala.concurrent.Promise;
 import scala.concurrent.duration.FiniteDuration;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -68,10 +74,12 @@ public class RecipeAdhocSourceTest extends RecipeTest {
         adhocSource(
             Source.empty()
                 .mapMaterializedValue(
-                    x -> {
-                      isStarted.set(true);
-                      return x;
-                    }),
+                        //todo: tmp workaround, will be removed
+                    (akka.japi.function.Function<NotUsed, NotUsed>)
+                        (x -> {
+                          isStarted.set(true);
+                          return x;
+                        })),
             duration200mills,
             3);
         Thread.sleep(300);

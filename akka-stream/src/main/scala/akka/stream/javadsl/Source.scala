@@ -817,7 +817,7 @@ final class Source[Out, Mat](delegate: scaladsl.Source[Out, Mat]) extends Graph[
    * Transform only the materialized value of this Source, leaving all other properties as they were.
    */
   def mapMaterializedValue[Mat2](f: function.Function[Mat, Mat2]): Source[Out, Mat2] =
-    new Source(delegate.mapMaterializedValue(f.apply _))
+    new Source[Out, Mat2](delegate.mapMaterializedValue(f.apply _))
 
   /**
    * Materializes this Source, immediately returning (1) its materialized value, and (2) a new Source
